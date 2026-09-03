@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Building2,
@@ -79,6 +79,14 @@ const emptyForm: ChantierForm = {
 };
 
 export default function ChantiersPage() {
+  return (
+    <Suspense fallback={<ChantiersPageFallback />}>
+      <ChantiersContent />
+    </Suspense>
+  );
+}
+
+function ChantiersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -1148,5 +1156,16 @@ function StatusBadge({
     >
       {status}
     </span>
+  );
+}
+
+function ChantiersPageFallback() {
+  return (
+    <div className="w-full px-7 py-7">
+      <div className="flex min-h-[320px] items-center justify-center gap-2 text-sm text-slate-500">
+        <Loader2 size={18} className="animate-spin" />
+        Chargement des chantiers...
+      </div>
+    </div>
   );
 }
