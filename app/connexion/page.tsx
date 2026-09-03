@@ -9,11 +9,11 @@ import {
   LockKeyhole,
   Mail,
 } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
-export default function ConnexionPage() {
+function ConnexionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -411,5 +411,21 @@ export default function ConnexionPage() {
         </section>
       </div>
     </main>
+  );
+}
+
+export default function ConnexionPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
+          <p className="text-sm font-semibold text-slate-500">
+            Chargement...
+          </p>
+        </main>
+      }
+    >
+      <ConnexionContent />
+    </Suspense>
   );
 }

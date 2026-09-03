@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Plus,
@@ -91,7 +91,7 @@ function createEmptyForm(): FormState {
   };
 }
 
-export default function RendezVousPage() {
+function RendezVousContent() {
   const searchParams = useSearchParams();
 
   const [appointments, setAppointments] = useState<RendezVous[]>([]);
@@ -1182,6 +1182,23 @@ export default function RendezVousPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+
+export default function RendezVousPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full px-7 py-7">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
+            Chargement des rendez-vous...
+          </div>
+        </div>
+      }
+    >
+      <RendezVousContent />
+    </Suspense>
   );
 }
 
