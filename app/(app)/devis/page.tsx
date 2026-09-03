@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Search,
@@ -48,6 +48,21 @@ type ClientRow = {
 };
 
 export default function DevisPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[40vh] items-center justify-center gap-2 text-sm text-slate-500">
+          <Loader2 size={18} className="animate-spin" />
+          Chargement des devis...
+        </div>
+      }
+    >
+      <DevisPageContent />
+    </Suspense>
+  );
+}
+
+function DevisPageContent() {
   const searchParams = useSearchParams();
   const clientId = searchParams.get("clientId");
 
