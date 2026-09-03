@@ -3,13 +3,26 @@ import { runAllServerAutomations } from "@/lib/automations/engine";
 
 function isAuthorized(request: Request) {
   const authHeader = request.headers.get("authorization");
-  const expectedSecret = process.env.AUTOMATION_CRON_SECRET;
 
-  if (!expectedSecret) {
+  const vercelCronSecret = process.env.CRON_SECRET;
+  const automationCronSecret = process.env.AUTOMATION_CRON_SECRET;
+
+  if (!authHeader) {
     return false;
   }
 
-  return authHeader === `Bearer ${expectedSecret}`;
+  const validSecrets = [
+    vercelCronSecret,
+    automationCronSecret,
+  ].filter(Boolean);
+
+  if (validSecrets.length === 0) {
+    return false;
+  }
+
+  return validSecrets.some(
+    (secret) => authHeader === `Bearer ${secret}`
+  );
 }
 
 async function handleAutomationRun(request: Request) {
