@@ -23,6 +23,7 @@ type DocumentRow = {
   category: string | null;
   note: string | null;
   created_at: string;
+  signedUrl: string;
 };
 
 type ChantierRow = {
@@ -104,9 +105,28 @@ export default function DocumentsPage() {
       );
     }
 
-    setDocuments(
-      (documentsResponse.data || []) as DocumentRow[]
+    const documentsWithSignedUrls = await Promise.all(
+      (documentsResponse.data || []).map(async (document) => {
+        const { data: signedData, error: signedError } =
+          await supabase.storage
+            .from("chantier-documents")
+            .createSignedUrl(document.file_path, 60 * 60);
+
+        if (signedError) {
+          console.error(
+            "Erreur URL signée document :",
+            signedError
+          );
+        }
+
+        return {
+          ...document,
+          signedUrl: signedData?.signedUrl || "",
+        } as DocumentRow;
+      })
     );
+
+    setDocuments(documentsWithSignedUrls);
 
     setChantiers(
       (chantiersResponse.data || []) as ChantierRow[]
@@ -121,14 +141,6 @@ export default function DocumentsPage() {
         (chantier) => chantier.id === chantierId
       )?.name || "Chantier inconnu"
     );
-  }
-
-  function getPublicUrl(filePath: string) {
-    const { data } = supabase.storage
-      .from("chantier-documents")
-      .getPublicUrl(filePath);
-
-    return data.publicUrl;
   }
 
   function formatFileSize(size: number | null) {
@@ -465,10 +477,6 @@ export default function DocumentsPage() {
               </div>
 
               {filteredDocuments.map((document) => {
-                const publicUrl = getPublicUrl(
-                  document.file_path
-                );
-
                 return (
                   <div
                     key={document.id}
@@ -530,9 +538,15 @@ export default function DocumentsPage() {
 
                     <div className="flex items-center gap-2">
                       <a
-                        href={publicUrl}
+                        href={document.signedUrl}
                         target="_blank"
                         rel="noreferrer"
+                        aria-disabled={!document.signedUrl}
+                        onClick={(event) => {
+                          if (!document.signedUrl) {
+                            event.preventDefault();
+                          }
+                        }}
                         title="Ouvrir"
                         className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                       >
@@ -540,8 +554,14 @@ export default function DocumentsPage() {
                       </a>
 
                       <a
-                        href={publicUrl}
+                        href={document.signedUrl}
                         download={document.file_name}
+                        aria-disabled={!document.signedUrl}
+                        onClick={(event) => {
+                          if (!document.signedUrl) {
+                            event.preventDefault();
+                          }
+                        }}
                         title="Télécharger"
                         className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                       >

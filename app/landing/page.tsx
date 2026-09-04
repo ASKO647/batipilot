@@ -98,27 +98,32 @@ const features: Feature[] = [
 
 const faq: FAQ[] = [
   {
-    question: "BatiPilot est-il uniquement destiné aux entreprises du bâtiment ?",
+    question:
+      "BatiPilot est-il uniquement destiné aux entreprises du bâtiment ?",
     answer:
       "BatiPilot est conçu en priorité pour les artisans, TPE et PME du bâtiment afin d'adapter l'expérience aux contraintes réelles du terrain.",
   },
   {
-    question: "Est-ce que BatiPilot remplace mon CRM actuel ?",
+    question:
+      "Est-ce que BatiPilot remplace mon CRM actuel ?",
     answer:
       "BatiPilot centralise la relation client, les devis, les rendez-vous et le suivi opérationnel dans un seul espace.",
   },
   {
-    question: "Les automatisations peuvent-elles fonctionner seules ?",
+    question:
+      "Les automatisations peuvent-elles fonctionner seules ?",
     answer:
       "Oui. Certaines actions peuvent être automatisées totalement, tandis que d'autres peuvent demander une validation humaine.",
   },
   {
-    question: "Le téléphone IA peut-il qualifier les prospects ?",
+    question:
+      "Le téléphone IA peut-il qualifier les prospects ?",
     answer:
       "Oui. Il peut recueillir les informations essentielles, identifier le besoin et préparer la suite du parcours commercial.",
   },
   {
-    question: "Puis-je utiliser BatiPilot sur mobile ?",
+    question:
+      "Puis-je utiliser BatiPilot sur mobile ?",
     answer:
       "L'interface est responsive afin de rester accessible depuis un ordinateur, une tablette ou un smartphone.",
   },
@@ -130,29 +135,35 @@ function Reveal({
   className = "",
 }: RevealProps) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] =
+    useState(false);
 
   useEffect(() => {
     const node = ref.current;
 
     if (!node) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.unobserve(entry.target);
+    const observer =
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.unobserve(
+              entry.target
+            );
+          }
+        },
+        {
+          threshold: 0.12,
+          rootMargin:
+            "0px 0px -40px 0px",
         }
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px",
-      }
-    );
+      );
 
     observer.observe(node);
 
-    return () => observer.disconnect();
+    return () =>
+      observer.disconnect();
   }, []);
 
   return (
@@ -184,7 +195,13 @@ function SectionTitle({
   center?: boolean;
 }) {
   return (
-    <div className={center ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
+    <div
+      className={
+        center
+          ? "mx-auto max-w-3xl text-center"
+          : "max-w-3xl"
+      }
+    >
       <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-600">
         {eyebrow}
       </p>
@@ -223,24 +240,38 @@ function Stat({
 }
 
 export default function LandingPage() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [openFAQ, setOpenFAQ] = useState<number | null>(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mobileOpen, setMobileOpen] =
+    useState(false);
+
+  const [openFAQ, setOpenFAQ] =
+    useState<number | null>(0);
+
+  const [
+    scrollProgress,
+    setScrollProgress,
+  ] = useState(0);
 
   useEffect(() => {
     const updateScroll = () => {
       const max =
-        document.documentElement.scrollHeight -
+        document.documentElement
+          .scrollHeight -
         window.innerHeight;
 
       setScrollProgress(
-        max <= 0 ? 0 : window.scrollY / max
+        max <= 0
+          ? 0
+          : window.scrollY / max
       );
     };
 
-    window.addEventListener("scroll", updateScroll, {
-      passive: true,
-    });
+    window.addEventListener(
+      "scroll",
+      updateScroll,
+      {
+        passive: true,
+      }
+    );
 
     updateScroll();
 
@@ -262,33 +293,34 @@ export default function LandingPage() {
       <div
         className="fixed left-0 top-0 z-[100] h-[3px] bg-blue-600 transition-all"
         style={{
-          width: `${scrollProgress * 100}%`,
+          width: `${
+            scrollProgress * 100
+          }%`,
         }}
       />
 
       {/* 1 - NAVBAR */}
       <header className="fixed left-0 right-0 top-0 z-50 px-4 pt-3">
         <nav className="mx-auto flex h-[66px] max-w-7xl items-center justify-between rounded-2xl border border-slate-200/80 bg-white/90 px-4 shadow-lg shadow-slate-900/5 backdrop-blur-xl md:px-6">
-          
-            <Link
-  href="/landing"
-  className="flex items-center gap-3"
-  onClick={closeMenu}
->
-  <img
-    src="/image/batipilot-logo.png"
-    alt="BatiPilot"
-    className="h-10 w-10 rounded-xl object-cover"
-  />
+          <Link
+            href="/landing"
+            className="flex items-center gap-3"
+            onClick={closeMenu}
+          >
+            <img
+              src="/image/batipilot-logo.png"
+              alt="BatiPilot"
+              className="h-10 w-10 rounded-xl object-cover"
+            />
 
-<div>
-            <p
-            className="text-[17px] font-black tracking-tight">
+            <div>
+              <p className="text-[17px] font-black tracking-tight">
                 BatiPilot
               </p>
 
-            <p className="hidden text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:block">
-                Gestion intelligente du bâtiment
+              <p className="hidden text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:block">
+                Gestion intelligente du
+                bâtiment
               </p>
             </div>
           </Link>
@@ -338,20 +370,25 @@ export default function LandingPage() {
               Se connecter
             </Link>
 
-            <a
-              href="#tarifs"
+            <Link
+              href="/demander-un-devis"
               className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
             >
               Commencer
-              <ArrowRight size={16} />
-            </a>
+              <ArrowRight
+                size={16}
+              />
+            </Link>
           </div>
 
           <button
             type="button"
             aria-label="Menu"
             onClick={() =>
-              setMobileOpen((current) => !current)
+              setMobileOpen(
+                (current) =>
+                  !current
+              )
             }
             className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 md:hidden"
           >
@@ -366,41 +403,70 @@ export default function LandingPage() {
         {mobileOpen && (
           <div className="mx-auto mt-2 max-w-7xl rounded-2xl border border-slate-200 bg-white p-5 shadow-xl md:hidden">
             <div className="flex flex-col gap-4">
-              <a href="#plateforme" onClick={closeMenu}>
+              <a
+                href="#plateforme"
+                onClick={
+                  closeMenu
+                }
+              >
                 Plateforme
               </a>
 
-              <a href="#fonctionnalites" onClick={closeMenu}>
+              <a
+                href="#fonctionnalites"
+                onClick={
+                  closeMenu
+                }
+              >
                 Fonctionnalités
               </a>
 
-              <a href="#ia" onClick={closeMenu}>
+              <a
+                href="#ia"
+                onClick={
+                  closeMenu
+                }
+              >
                 Intelligence IA
               </a>
 
-              <a href="#tarifs" onClick={closeMenu}>
+              <a
+                href="#tarifs"
+                onClick={
+                  closeMenu
+                }
+              >
                 Tarifs
               </a>
 
-              <a href="#faq" onClick={closeMenu}>
+              <a
+                href="#faq"
+                onClick={
+                  closeMenu
+                }
+              >
                 FAQ
               </a>
 
               <Link
                 href="/connexion"
-                onClick={closeMenu}
+                onClick={
+                  closeMenu
+                }
                 className="rounded-xl border border-slate-200 px-4 py-3 text-center font-bold"
               >
                 Se connecter
               </Link>
 
-              <a
-                href="#tarifs"
-                onClick={closeMenu}
+              <Link
+                href="/demander-un-devis"
+                onClick={
+                  closeMenu
+                }
                 className="rounded-xl bg-blue-600 px-4 py-3 text-center font-bold text-white"
               >
                 Commencer
-              </a>
+              </Link>
             </div>
           </div>
         )}
@@ -418,59 +484,84 @@ export default function LandingPage() {
           <Reveal>
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-xs font-black text-blue-700 shadow-sm">
-                <Sparkles size={15} />
-                Le copilote IA du bâtiment
+                <Sparkles
+                  size={15}
+                />
+                Le copilote IA du
+                bâtiment
               </div>
 
               <h1 className="mt-6 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.055em] md:text-7xl">
-                Pilotez votre entreprise.
+                Pilotez votre
+                entreprise.
                 <span className="block text-blue-600">
-                  BatiPilot travaille avec vous.
+                  BatiPilot travaille
+                  avec vous.
                 </span>
               </h1>
 
               <p className="mt-6 max-w-xl text-lg leading-8 text-slate-500">
-                Clients, devis, chantiers, rendez-vous,
-                appels, automatisations et agents IA dans
-                un seul espace pensé pour les
-                professionnels du bâtiment.
+                Clients, devis,
+                chantiers,
+                rendez-vous,
+                appels,
+                automatisations et
+                agents IA dans un
+                seul espace pensé
+                pour les
+                professionnels du
+                bâtiment.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#tarifs"
+                <Link
+                  href="/demander-un-devis"
                   className="group flex items-center justify-center gap-3 rounded-xl bg-blue-600 px-7 py-4 font-black text-white shadow-xl shadow-blue-600/20 transition hover:-translate-y-1 hover:bg-blue-700"
                 >
-                  Découvrir BatiPilot
+                  Découvrir
+                  BatiPilot
 
                   <ArrowRight
                     size={18}
                     className="transition group-hover:translate-x-1"
                   />
-                </a>
+                </Link>
 
                 <a
                   href="#plateforme"
                   className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-7 py-4 font-black text-slate-700 transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  Voir la plateforme
-                  <ChevronRight size={17} />
+                  Voir la
+                  plateforme
+                  <ChevronRight
+                    size={17}
+                  />
                 </a>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-4 text-xs font-semibold text-slate-500">
                 <span className="flex items-center gap-2">
-                  <Check size={15} className="text-green-500" />
+                  <Check
+                    size={15}
+                    className="text-green-500"
+                  />
                   Sans engagement
                 </span>
 
                 <span className="flex items-center gap-2">
-                  <Check size={15} className="text-green-500" />
-                  Configuration rapide
+                  <Check
+                    size={15}
+                    className="text-green-500"
+                  />
+                  Configuration
+                  rapide
                 </span>
 
                 <span className="flex items-center gap-2">
-                  <Check size={15} className="text-green-500" />
+                  <Check
+                    size={15}
+                    className="text-green-500"
+                  />
                   Assistance IA
                 </span>
               </div>
@@ -494,16 +585,23 @@ export default function LandingPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                        Activité BatiPilot
+                        Activité
+                        BatiPilot
                       </p>
 
                       <p className="mt-1 text-lg font-black">
-                        Votre journée est sous contrôle
+                        Votre journée
+                        est sous
+                        contrôle
                       </p>
                     </div>
 
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white">
-                      <TrendingUp size={20} />
+                      <TrendingUp
+                        size={
+                          20
+                        }
+                      />
                     </div>
                   </div>
 
@@ -521,10 +619,22 @@ export default function LandingPage() {
       <Reveal>
         <section className="px-5 pb-14 md:px-8">
           <div className="mx-auto grid max-w-7xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:grid-cols-4">
-            <Stat value="24/7" label="activité suivie" />
-            <Stat value="1" label="plateforme unique" />
-            <Stat value="10h+" label="de temps récupéré" />
-            <Stat value="100%" label="pensé bâtiment" />
+            <Stat
+              value="24/7"
+              label="activité suivie"
+            />
+            <Stat
+              value="1"
+              label="plateforme unique"
+            />
+            <Stat
+              value="10h+"
+              label="de temps récupéré"
+            />
+            <Stat
+              value="100%"
+              label="pensé bâtiment"
+            />
           </div>
         </section>
       </Reveal>
@@ -545,23 +655,39 @@ export default function LandingPage() {
               "Informations éparpillées",
               "Relances oubliées",
               "Temps administratif perdu",
-            ].map((item, index) => (
-              <Reveal key={item} delay={index * 80}>
-                <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-6">
-                  <X className="text-red-500" size={21} />
+            ].map(
+              (item, index) => (
+                <Reveal
+                  key={item}
+                  delay={
+                    index * 80
+                  }
+                >
+                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-6">
+                    <X
+                      className="text-red-500"
+                      size={21}
+                    />
 
-                  <h3 className="mt-4 text-lg font-black">
-                    {item}
-                  </h3>
+                    <h3 className="mt-4 text-lg font-black">
+                      {item}
+                    </h3>
 
-                  <p className="mt-2 text-sm leading-6 text-slate-500">
-                    Moins de visibilité signifie plus de
-                    temps perdu et plus de risques
-                    d'oublier une action importante.
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      Moins de
+                      visibilité
+                      signifie plus
+                      de temps perdu
+                      et plus de
+                      risques
+                      d'oublier une
+                      action
+                      importante.
+                    </p>
+                  </div>
+                </Reveal>
+              )
+            )}
           </div>
         </div>
       </section>
@@ -586,20 +712,28 @@ export default function LandingPage() {
                   "Devis et relances",
                   "Chantiers et rendez-vous",
                   "Agents IA et automatisations",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-3"
-                  >
-                    <CheckCircle2
-                      size={19}
-                      className="text-blue-600"
-                    />
-                    <span className="font-semibold">
-                      {item}
-                    </span>
-                  </div>
-                ))}
+                ].map(
+                  (item) => (
+                    <div
+                      key={
+                        item
+                      }
+                      className="flex items-center gap-3"
+                    >
+                      <CheckCircle2
+                        size={
+                          19
+                        }
+                        className="text-blue-600"
+                      />
+                      <span className="font-semibold">
+                        {
+                          item
+                        }
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </Reveal>
@@ -624,7 +758,9 @@ export default function LandingPage() {
               </p>
 
               <h2 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">
-                Commencez chaque journée avec les bonnes informations.
+                Commencez chaque
+                journée avec les
+                bonnes informations.
               </h2>
             </div>
           </Reveal>
@@ -632,29 +768,59 @@ export default function LandingPage() {
           <Reveal delay={100}>
             <div className="mt-10 grid gap-4 rounded-[28px] border border-white/10 bg-white/[0.04] p-5 md:grid-cols-4 md:p-7">
               {[
-                ["12", "Contacts", Users],
-                ["8", "Devis actifs", FileText],
-                ["5", "Chantiers", Hammer],
-                ["4", "Actions IA", Bot],
-              ].map(([value, title, Icon]: any) => (
-                <div
-                  key={title}
-                  className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"
-                >
-                  <Icon
-                    size={20}
-                    className="text-blue-400"
-                  />
+                [
+                  "12",
+                  "Contacts",
+                  Users,
+                ],
+                [
+                  "8",
+                  "Devis actifs",
+                  FileText,
+                ],
+                [
+                  "5",
+                  "Chantiers",
+                  Hammer,
+                ],
+                [
+                  "4",
+                  "Actions IA",
+                  Bot,
+                ],
+              ].map(
+                ([
+                  value,
+                  title,
+                  Icon,
+                ]: any) => (
+                  <div
+                    key={
+                      title
+                    }
+                    className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"
+                  >
+                    <Icon
+                      size={
+                        20
+                      }
+                      className="text-blue-400"
+                    />
 
-                  <p className="mt-5 text-3xl font-black">
-                    {value}
-                  </p>
+                    <p className="mt-5 text-3xl font-black">
+                      {
+                        value
+                      }
+                    </p>
 
-                  <p className="mt-1 text-sm text-slate-400">
-                    {title}
-                  </p>
-                </div>
-              ))}
+                    <p className="mt-1 text-sm text-slate-400">
+                      {
+                        title
+                      }
+                    </p>
+                  </div>
+                )
+              )}
             </div>
           </Reveal>
         </div>
@@ -676,30 +842,50 @@ export default function LandingPage() {
           </Reveal>
 
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
+            {features.map(
+              (
+                feature,
+                index
+              ) => {
+                const Icon =
+                  feature.icon;
 
-              return (
-                <Reveal
-                  key={feature.title}
-                  delay={(index % 4) * 70}
-                >
-                  <div className="group h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-blue-200 hover:shadow-xl">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
-                      <Icon size={20} />
+                return (
+                  <Reveal
+                    key={
+                      feature.title
+                    }
+                    delay={
+                      (index %
+                        4) *
+                      70
+                    }
+                  >
+                    <div className="group h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-blue-200 hover:shadow-xl">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+                        <Icon
+                          size={
+                            20
+                          }
+                        />
+                      </div>
+
+                      <h3 className="mt-5 text-lg font-black">
+                        {
+                          feature.title
+                        }
+                      </h3>
+
+                      <p className="mt-2 text-sm leading-6 text-slate-500">
+                        {
+                          feature.text
+                        }
+                      </p>
                     </div>
-
-                    <h3 className="mt-5 text-lg font-black">
-                      {feature.title}
-                    </h3>
-
-                    <p className="mt-2 text-sm leading-6 text-slate-500">
-                      {feature.text}
-                    </p>
-                  </div>
-                </Reveal>
-              );
-            })}
+                  </Reveal>
+                );
+              }
+            )}
           </div>
         </div>
       </section>
@@ -741,11 +927,13 @@ export default function LandingPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-slate-400">
-                    DEVIS #BP-0042
+                    DEVIS
+                    #BP-0042
                   </p>
 
                   <p className="mt-1 text-xl font-black">
-                    Rénovation énergétique
+                    Rénovation
+                    énergétique
                   </p>
                 </div>
 
@@ -759,22 +947,29 @@ export default function LandingPage() {
                   <span className="text-slate-500">
                     Montant
                   </span>
-                  <strong>18 450 €</strong>
+                  <strong>
+                    18 450 €
+                  </strong>
                 </div>
 
                 <div className="flex justify-between border-b border-slate-100 pb-4">
                   <span className="text-slate-500">
                     Client
                   </span>
-                  <strong>Martin Habitat</strong>
+                  <strong>
+                    Martin
+                    Habitat
+                  </strong>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="text-slate-500">
-                    Prochaine action
+                    Prochaine
+                    action
                   </span>
                   <strong className="text-blue-600">
-                    Relance automatique
+                    Relance
+                    automatique
                   </strong>
                 </div>
               </div>
@@ -803,12 +998,18 @@ export default function LandingPage() {
                   </p>
 
                   <h2 className="mt-4 text-4xl font-black md:text-6xl">
-                    Le bureau vous suit sur le terrain.
+                    Le bureau vous
+                    suit sur le
+                    terrain.
                   </h2>
 
                   <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
-                    Consultez l'avancement, les informations
-                    du client et les prochaines étapes depuis
+                    Consultez
+                    l'avancement,
+                    les informations
+                    du client et les
+                    prochaines
+                    étapes depuis
                     n'importe où.
                   </p>
                 </div>
@@ -837,44 +1038,67 @@ export default function LandingPage() {
             {[
               {
                 icon: Phone,
-                title: "Téléphone IA",
-                text: "Répond aux demandes et qualifie les prospects.",
+                title:
+                  "Téléphone IA",
+                text:
+                  "Répond aux demandes et qualifie les prospects.",
               },
               {
                 icon: Bot,
-                title: "Agents spécialisés",
-                text: "Analysent les données et proposent les prochaines actions.",
+                title:
+                  "Agents spécialisés",
+                text:
+                  "Analysent les données et proposent les prochaines actions.",
               },
               {
                 icon: WandSparkles,
-                title: "Autopilot",
-                text: "Orchestre les étapes répétitives du parcours client.",
+                title:
+                  "Autopilot",
+                text:
+                  "Orchestre les étapes répétitives du parcours client.",
               },
-            ].map((item, index) => {
-              const Icon = item.icon;
+            ].map(
+              (
+                item,
+                index
+              ) => {
+                const Icon =
+                  item.icon;
 
-              return (
-                <Reveal
-                  key={item.title}
-                  delay={index * 100}
-                >
-                  <div className="rounded-[24px] border border-blue-100 bg-gradient-to-b from-blue-50 to-white p-7">
-                    <Icon
-                      size={25}
-                      className="text-blue-600"
-                    />
+                return (
+                  <Reveal
+                    key={
+                      item.title
+                    }
+                    delay={
+                      index *
+                      100
+                    }
+                  >
+                    <div className="rounded-[24px] border border-blue-100 bg-gradient-to-b from-blue-50 to-white p-7">
+                      <Icon
+                        size={
+                          25
+                        }
+                        className="text-blue-600"
+                      />
 
-                    <h3 className="mt-6 text-xl font-black">
-                      {item.title}
-                    </h3>
+                      <h3 className="mt-6 text-xl font-black">
+                        {
+                          item.title
+                        }
+                      </h3>
 
-                    <p className="mt-3 leading-7 text-slate-500">
-                      {item.text}
-                    </p>
-                  </div>
-                </Reveal>
-              );
-            })}
+                      <p className="mt-3 leading-7 text-slate-500">
+                        {
+                          item.text
+                        }
+                      </p>
+                    </div>
+                  </Reveal>
+                );
+              }
+            )}
           </div>
         </div>
       </section>
@@ -897,20 +1121,30 @@ export default function LandingPage() {
                 "Devis envoyé → création d'une relance",
                 "Devis accepté → préparation du chantier",
                 "Rendez-vous terminé → prochaine action",
-              ].map((item, index) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-[#F8FAFC] p-5"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 font-black text-white">
-                    {index + 1}
-                  </div>
+              ].map(
+                (
+                  item,
+                  index
+                ) => (
+                  <div
+                    key={
+                      item
+                    }
+                    className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-[#F8FAFC] p-5"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 font-black text-white">
+                      {index +
+                        1}
+                    </div>
 
-                  <span className="font-bold">
-                    {item}
-                  </span>
-                </div>
-              ))}
+                    <span className="font-bold">
+                      {
+                        item
+                      }
+                    </span>
+                  </div>
+                )
+              )}
             </div>
           </Reveal>
         </div>
@@ -944,26 +1178,46 @@ export default function LandingPage() {
                 "Automatisation",
                 "Vous activez progressivement les fonctions IA.",
               ],
-            ].map(([number, title, text], index) => (
-              <Reveal
-                key={number}
-                delay={index * 100}
-              >
-                <div className="text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 font-black text-white shadow-lg shadow-blue-600/20">
-                    {number}
+            ].map(
+              (
+                [
+                  number,
+                  title,
+                  text,
+                ],
+                index
+              ) => (
+                <Reveal
+                  key={
+                    number
+                  }
+                  delay={
+                    index *
+                    100
+                  }
+                >
+                  <div className="text-center">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 font-black text-white shadow-lg shadow-blue-600/20">
+                      {
+                        number
+                      }
+                    </div>
+
+                    <h3 className="mt-5 text-xl font-black">
+                      {
+                        title
+                      }
+                    </h3>
+
+                    <p className="mt-2 leading-7 text-slate-500">
+                      {
+                        text
+                      }
+                    </p>
                   </div>
-
-                  <h3 className="mt-5 text-xl font-black">
-                    {title}
-                  </h3>
-
-                  <p className="mt-2 leading-7 text-slate-500">
-                    {text}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              )
+            )}
           </div>
         </div>
       </section>
@@ -981,28 +1235,64 @@ export default function LandingPage() {
 
           <div className="mt-10 grid gap-4 md:grid-cols-4">
             {[
-              [Clock3, "Temps", "Réduisez les tâches répétitives."],
-              [TrendingUp, "Ventes", "Suivez mieux chaque opportunité."],
-              [ShieldCheck, "Contrôle", "Gardez une vision claire."],
-              [Rocket, "Croissance", "Structurez votre activité."],
-            ].map(([Icon, title, text]: any, index) => (
-              <Reveal
-                key={title}
-                delay={index * 70}
-              >
-                <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur">
-                  <Icon size={22} />
+              [
+                Clock3,
+                "Temps",
+                "Réduisez les tâches répétitives.",
+              ],
+              [
+                TrendingUp,
+                "Ventes",
+                "Suivez mieux chaque opportunité.",
+              ],
+              [
+                ShieldCheck,
+                "Contrôle",
+                "Gardez une vision claire.",
+              ],
+              [
+                Rocket,
+                "Croissance",
+                "Structurez votre activité.",
+              ],
+            ].map(
+              ([
+                Icon,
+                title,
+                text,
+              ]: any,
+              index) => (
+                <Reveal
+                  key={
+                    title
+                  }
+                  delay={
+                    index *
+                    70
+                  }
+                >
+                  <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur">
+                    <Icon
+                      size={
+                        22
+                      }
+                    />
 
-                  <h3 className="mt-5 text-lg font-black">
-                    {title}
-                  </h3>
+                    <h3 className="mt-5 text-lg font-black">
+                      {
+                        title
+                      }
+                    </h3>
 
-                  <p className="mt-2 text-sm leading-6 text-blue-100">
-                    {text}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+                    <p className="mt-2 text-sm leading-6 text-blue-100">
+                      {
+                        text
+                      }
+                    </p>
+                  </div>
+                </Reveal>
+              )
+            )}
           </div>
         </div>
       </section>
@@ -1022,44 +1312,66 @@ export default function LandingPage() {
             {[
               {
                 icon: Hammer,
-                title: "Artisans",
-                text: "Centralisez vos demandes et votre suivi sans ajouter de complexité.",
+                title:
+                  "Artisans",
+                text:
+                  "Centralisez vos demandes et votre suivi sans ajouter de complexité.",
               },
               {
                 icon: Building2,
-                title: "TPE du bâtiment",
-                text: "Structurez l'activité commerciale et opérationnelle.",
+                title:
+                  "TPE du bâtiment",
+                text:
+                  "Structurez l'activité commerciale et opérationnelle.",
               },
               {
                 icon: Users,
                 title: "PME",
-                text: "Donnez à vos équipes un outil commun et des processus cohérents.",
+                text:
+                  "Donnez à vos équipes un outil commun et des processus cohérents.",
               },
-            ].map((item, index) => {
-              const Icon = item.icon;
+            ].map(
+              (
+                item,
+                index
+              ) => {
+                const Icon =
+                  item.icon;
 
-              return (
-                <Reveal
-                  key={item.title}
-                  delay={index * 90}
-                >
-                  <div className="rounded-2xl border border-slate-200 bg-white p-7">
-                    <Icon
-                      className="text-blue-600"
-                      size={24}
-                    />
+                return (
+                  <Reveal
+                    key={
+                      item.title
+                    }
+                    delay={
+                      index *
+                      90
+                    }
+                  >
+                    <div className="rounded-2xl border border-slate-200 bg-white p-7">
+                      <Icon
+                        className="text-blue-600"
+                        size={
+                          24
+                        }
+                      />
 
-                    <h3 className="mt-5 text-xl font-black">
-                      {item.title}
-                    </h3>
+                      <h3 className="mt-5 text-xl font-black">
+                        {
+                          item.title
+                        }
+                      </h3>
 
-                    <p className="mt-3 leading-7 text-slate-500">
-                      {item.text}
-                    </p>
-                  </div>
-                </Reveal>
-              );
-            })}
+                      <p className="mt-3 leading-7 text-slate-500">
+                        {
+                          item.text
+                        }
+                      </p>
+                    </div>
+                  </Reveal>
+                );
+              }
+            )}
           </div>
         </div>
       </section>
@@ -1082,11 +1394,14 @@ export default function LandingPage() {
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
             {[
               {
-                name: "Assist",
-                price: "199 €",
+                name:
+                  "Assist",
+                price:
+                  "199 €",
                 description:
                   "Pour centraliser l'activité et profiter des premières fonctions IA.",
-                popular: false,
+                popular:
+                  false,
                 features: [
                   "CRM clients",
                   "Gestion des devis",
@@ -1096,11 +1411,14 @@ export default function LandingPage() {
                 ],
               },
               {
-                name: "Autopilot",
-                price: "499 €",
+                name:
+                  "Autopilot",
+                price:
+                  "499 €",
                 description:
                   "Pour automatiser réellement le parcours commercial.",
-                popular: true,
+                popular:
+                  true,
                 features: [
                   "Tout Assist",
                   "Téléphone IA",
@@ -1110,11 +1428,14 @@ export default function LandingPage() {
                 ],
               },
               {
-                name: "Custom",
-                price: "999 €",
+                name:
+                  "Custom",
+                price:
+                  "999 €",
                 description:
                   "Pour construire une configuration adaptée à votre organisation.",
-                popular: false,
+                popular:
+                  false,
                 features: [
                   "Tout Autopilot",
                   "Agents personnalisés",
@@ -1123,87 +1444,120 @@ export default function LandingPage() {
                   "Configuration avancée",
                 ],
               },
-            ].map((plan, index) => (
-              <Reveal
-                key={plan.name}
-                delay={index * 90}
-              >
-                <div
-                  className={`relative h-full rounded-[26px] border p-7 ${
-                    plan.popular
-                      ? "border-blue-600 bg-[#172033] text-white shadow-2xl"
-                      : "border-slate-200 bg-white"
-                  }`}
+            ].map(
+              (
+                plan,
+                index
+              ) => (
+                <Reveal
+                  key={
+                    plan.name
+                  }
+                  delay={
+                    index *
+                    90
+                  }
                 >
-                  {plan.popular && (
-                    <span className="absolute right-5 top-5 rounded-full bg-blue-600 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white">
-                      Recommandé
-                    </span>
-                  )}
-
-                  <p className="text-xs font-black uppercase tracking-widest text-blue-500">
-                    BatiPilot
-                  </p>
-
-                  <h3 className="mt-2 text-2xl font-black">
-                    {plan.name}
-                  </h3>
-
-                  <p
-                    className={`mt-4 min-h-[72px] text-sm leading-6 ${
+                  <div
+                    className={`relative h-full rounded-[26px] border p-7 ${
                       plan.popular
-                        ? "text-slate-400"
-                        : "text-slate-500"
+                        ? "border-blue-600 bg-[#172033] text-white shadow-2xl"
+                        : "border-slate-200 bg-white"
                     }`}
                   >
-                    {plan.description}
-                  </p>
+                    {plan.popular && (
+                      <span className="absolute right-5 top-5 rounded-full bg-blue-600 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                        Recommandé
+                      </span>
+                    )}
 
-                  <div className="mt-5">
-                    <span className="text-4xl font-black">
-                      {plan.price}
-                    </span>
+                    <p className="text-xs font-black uppercase tracking-widest text-blue-500">
+                      BatiPilot
+                    </p>
 
-                    <span
-                      className={`ml-2 text-sm ${
+                    <h3 className="mt-2 text-2xl font-black">
+                      {
+                        plan.name
+                      }
+                    </h3>
+
+                    <p
+                      className={`mt-4 min-h-[72px] text-sm leading-6 ${
                         plan.popular
                           ? "text-slate-400"
                           : "text-slate-500"
                       }`}
                     >
-                      / mois HT
-                    </span>
-                  </div>
+                      {
+                        plan.description
+                      }
+                    </p>
 
-                  <a
-                    href="#contact"
-                    className={`mt-7 flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-black transition ${
-                      plan.popular
-                        ? "bg-blue-600 text-white hover:bg-blue-500"
-                        : "bg-slate-100 text-slate-800 hover:bg-slate-200"
-                    }`}
-                  >
-                    Choisir {plan.name}
-                    <ChevronRight size={17} />
-                  </a>
+                    <div className="mt-5">
+                      <span className="text-4xl font-black">
+                        {
+                          plan.price
+                        }
+                      </span>
 
-                  <div className="mt-7 space-y-3">
-                    {plan.features.map((feature) => (
-                      <div
-                        key={feature}
-                        className="flex items-center gap-3 text-sm"
+                      <span
+                        className={`ml-2 text-sm ${
+                          plan.popular
+                            ? "text-slate-400"
+                            : "text-slate-500"
+                        }`}
                       >
-                        <Check
-                          size={15}
-                          className="text-green-500"
-                        />
-                        {feature}
-                      </div>
-                    ))}
+                        / mois HT
+                      </span>
+                    </div>
+
+                    <Link
+                      href="/demander-un-devis"
+                      className={`mt-7 flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-black transition ${
+                        plan.popular
+                          ? "bg-blue-600 text-white hover:bg-blue-500"
+                          : "bg-slate-100 text-slate-800 hover:bg-slate-200"
+                      }`}
+                    >
+                      Choisir{" "}
+                      {
+                        plan.name
+                      }
+                      <ChevronRight
+                        size={
+                          17
+                        }
+                      />
+                    </Link>
+
+                    <div className="mt-7 space-y-3">
+                      {plan.features.map(
+                        (
+                          feature
+                        ) => (
+                          <div
+                            key={
+                              feature
+                            }
+                            className="flex items-center gap-3 text-sm"
+                          >
+                            <Check
+                              size={
+                                15
+                              }
+                              className="text-green-500"
+                            />
+                            {
+                              feature
+                            }
+                          </div>
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              )
+            )}
           </div>
         </div>
       </section>
@@ -1223,41 +1577,60 @@ export default function LandingPage() {
           </Reveal>
 
           <div className="mt-9 space-y-3">
-            {faq.map((item, index) => {
-              const isOpen = openFAQ === index;
+            {faq.map(
+              (
+                item,
+                index
+              ) => {
+                const isOpen =
+                  openFAQ ===
+                  index;
 
-              return (
-                <div
-                  key={item.question}
-                  className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setOpenFAQ(
-                        isOpen ? null : index
-                      )
+                return (
+                  <div
+                    key={
+                      item.question
                     }
-                    className="flex w-full items-center justify-between gap-6 p-5 text-left font-black"
+                    className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
                   >
-                    {item.question}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenFAQ(
+                          isOpen
+                            ? null
+                            : index
+                        )
+                      }
+                      className="flex w-full items-center justify-between gap-6 p-5 text-left font-black"
+                    >
+                      {
+                        item.question
+                      }
 
-                    <ChevronDown
-                      size={19}
-                      className={`shrink-0 transition ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
+                      <ChevronDown
+                        size={
+                          19
+                        }
+                        className={`shrink-0 transition ${
+                          isOpen
+                            ? "rotate-180"
+                            : ""
+                        }`}
+                      />
+                    </button>
 
-                  {isOpen && (
-                    <div className="border-t border-slate-100 px-5 py-5 text-sm leading-7 text-slate-500">
-                      {item.answer}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    {isOpen && (
+                      <div className="border-t border-slate-100 px-5 py-5 text-sm leading-7 text-slate-500">
+                        {
+                          item.answer
+                        }
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
       </section>
@@ -1279,23 +1652,31 @@ export default function LandingPage() {
               />
 
               <h2 className="mt-6 text-4xl font-black tracking-tight md:text-6xl">
-                Votre entreprise mérite un meilleur copilote.
+                Votre entreprise
+                mérite un meilleur
+                copilote.
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-blue-100">
-                Découvrez BatiPilot et construisez une
-                organisation plus simple, plus rapide et
-                mieux automatisée.
+                Découvrez BatiPilot
+                et construisez une
+                organisation plus
+                simple, plus rapide
+                et mieux
+                automatisée.
               </p>
 
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <a
-                  href="mailto:contact@batipilot.fr?subject=Demande%20de%20démonstration%20BatiPilot"
+                <Link
+                  href="/demander-un-devis"
                   className="inline-flex items-center justify-center gap-3 rounded-xl bg-white px-7 py-4 font-black text-blue-600 shadow-xl transition hover:-translate-y-1"
                 >
-                  Demander une démonstration
-                  <ArrowRight size={18} />
-                </a>
+                  Demander une
+                  démonstration
+                  <ArrowRight
+                    size={18}
+                  />
+                </Link>
 
                 <Link
                   href="/connexion"
@@ -1328,13 +1709,15 @@ export default function LandingPage() {
               </p>
 
               <p className="text-[10px] text-slate-400">
-                Gestion intelligente du bâtiment
+                Gestion intelligente
+                du bâtiment
               </p>
             </div>
           </Link>
 
           <p className="text-xs text-slate-400">
-            © 2026 BatiPilot. Tous droits réservés.
+            © 2026 BatiPilot. Tous
+            droits réservés.
           </p>
 
           <div className="flex flex-wrap gap-5 text-xs font-semibold text-slate-500">
@@ -1359,12 +1742,12 @@ export default function LandingPage() {
               FAQ
             </a>
 
-            <a
-              href="mailto:contact@batipilot.fr"
+            <Link
+              href="/demander-un-devis"
               className="transition hover:text-blue-600"
             >
               Contact
-            </a>
+            </Link>
           </div>
         </div>
       </footer>

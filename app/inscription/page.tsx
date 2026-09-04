@@ -104,13 +104,12 @@ export default function InscriptionPage() {
       }
 
       /*
-       * Si Supabase crée directement
-       * une session, on envoie
-       * l'utilisateur vers le nouveau
-       * dashboard.
+       * Si Supabase crée directement une session,
+       * le nouveau compte doit d'abord terminer
+       * la configuration professionnelle.
        */
       if (data.session) {
-        router.replace("/dashboard");
+        router.replace("/onboarding");
         router.refresh();
         return;
       }

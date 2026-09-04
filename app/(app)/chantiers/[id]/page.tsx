@@ -1,4 +1,4 @@
-"use client";
+
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -284,16 +284,26 @@ export default function ChantierDetailPage() {
       return;
     }
 
-    const items = (data || []).map((photo) => {
-      const { data: urlData } = supabase.storage
-        .from("chantier-photos")
-        .getPublicUrl(photo.file_path);
+    const items = await Promise.all(
+      (data || []).map(async (photo) => {
+        const { data: urlData, error: signedUrlError } =
+          await supabase.storage
+            .from("chantier-photos")
+            .createSignedUrl(photo.file_path, 60 * 60);
 
-      return {
-        ...photo,
-        publicUrl: urlData.publicUrl,
-      } as ChantierPhoto;
-    });
+        if (signedUrlError) {
+          console.error(
+            "Erreur URL signée photo :",
+            signedUrlError
+          );
+        }
+
+        return {
+          ...photo,
+          publicUrl: urlData?.signedUrl || "",
+        } as ChantierPhoto;
+      })
+    );
 
     setPhotos(items);
   }
@@ -310,16 +320,26 @@ export default function ChantierDetailPage() {
       return;
     }
 
-    const items = (data || []).map((document) => {
-      const { data: urlData } = supabase.storage
-        .from("chantier-documents")
-        .getPublicUrl(document.file_path);
+    const items = await Promise.all(
+      (data || []).map(async (document) => {
+        const { data: urlData, error: signedUrlError } =
+          await supabase.storage
+            .from("chantier-documents")
+            .createSignedUrl(document.file_path, 60 * 60);
 
-      return {
-        ...document,
-        publicUrl: urlData.publicUrl,
-      } as ChantierDocument;
-    });
+        if (signedUrlError) {
+          console.error(
+            "Erreur URL signée document :",
+            signedUrlError
+          );
+        }
+
+        return {
+          ...document,
+          publicUrl: urlData?.signedUrl || "",
+        } as ChantierDocument;
+      })
+    );
 
     setDocuments(items);
   }

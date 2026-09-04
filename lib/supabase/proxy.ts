@@ -1,12 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
-import {
-  NextResponse,
-  type NextRequest,
-} from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
-export async function updateSession(
-  request: NextRequest
-) {
+export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request,
   });
@@ -21,53 +16,35 @@ export async function updateSession(
         },
 
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(
-            ({ name, value }) => {
-              request.cookies.set(name, value);
-            }
-          );
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
 
           response = NextResponse.next({
             request,
           });
 
-          cookiesToSet.forEach(
-            ({
-              name,
-              value,
-              options,
-            }) => {
-              response.cookies.set(
-                name,
-                value,
-                options
-              );
-            }
-          );
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
         },
       },
     }
   );
 
-  const { data, error } =
-    await supabase.auth.getClaims();
-
-  const userId =
-    data?.claims?.sub ?? null;
-
-  const pathname =
-    request.nextUrl.pathname;
+  const { data, error } = await supabase.auth.getClaims();
+  const userId = data?.claims?.sub ?? null;
+  const pathname = request.nextUrl.pathname;
 
   /*
-   * Les routes API restent gérées
-   * par leur propre authentification.
+   * Les routes API gèrent leur propre authentification.
    */
   if (pathname.startsWith("/api")) {
     return response;
   }
 
   /*
-   * Pages accessibles sans connexion.
+   * Pages publiques accessibles sans connexion.
    */
   const publicRoutes = [
     "/",
@@ -76,56 +53,114 @@ export async function updateSession(
     "/inscription",
     "/demo",
     "/demande-demo",
+    "/demander-un-devis",
   ];
 
-  const isPublicRoute =
-    publicRoutes.includes(pathname);
+  const isPublicRoute = publicRoutes.includes(pathname);
 
   /*
-   * Si l'utilisateur n'est pas connecté
-   * et essaie d'accéder au SaaS,
-   * on le renvoie vers /connexion.
+   * Un visiteur non connecté qui tente d'accéder
+   * à une page privée est redirigé vers la connexion.
    */
-  if (
-    (!userId || error) &&
-    !isPublicRoute
-  ) {
-    const loginUrl =
-      request.nextUrl.clone();
+  if ((!userId || error) && !isPublicRoute) {
+    const loginUrl = request.nextUrl.clone();
 
     loginUrl.pathname = "/connexion";
+    loginUrl.search = "";
 
-    loginUrl.searchParams.set(
-      "redirectTo",
-      pathname
-    );
+    /*
+     * On ne conserve que le chemin interne.
+     * Cela évite de transformer redirectTo en redirection externe.
+     */
+    loginUrl.searchParams.set("redirectTo", pathname);
 
-    return NextResponse.redirect(
-      loginUrl
-    );
+    return NextResponse.redirect(loginUrl);
   }
 
   /*
-   * Si l'utilisateur est déjà connecté,
-   * inutile de lui montrer Connexion
-   * ou Inscription.
+   * À partir d'ici, soit l'utilisateur est connecté,
+   * soit il consulte une page publique.
+   */
+  if (!userId) {
+    return response;
+  }
+
+  /*
+   * On récupère l'organisation liée au compte.
+   * Le profil est lisible par son propriétaire grâce à la RLS.
+   */
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("organization_id")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const organizationId = profile?.organization_id ?? null;
+
+  /*
+   * Si le compte possède une organisation, on vérifie
+   * si son onboarding a déjà été finalisé.
+   */
+  let onboardingCompleted = false;
+
+  if (organizationId) {
+    const { data: settings } = await supabase
+      .from("organization_settings")
+      .select("onboarding_completed")
+      .eq("organization_id", organizationId)
+      .maybeSingle();
+
+    onboardingCompleted = settings?.onboarding_completed === true;
+  }
+
+  /*
+   * Connexion / inscription :
+   *
+   * - compte configuré     -> dashboard
+   * - compte non configuré -> onboarding
+   */
+  if (pathname === "/connexion" || pathname === "/inscription") {
+    const destinationUrl = request.nextUrl.clone();
+
+    destinationUrl.pathname = onboardingCompleted
+      ? "/dashboard"
+      : "/onboarding";
+
+    destinationUrl.search = "";
+
+    return NextResponse.redirect(destinationUrl);
+  }
+
+  /*
+   * Un utilisateur connecté mais non configuré ne peut pas
+   * entrer dans le SaaS avant d'avoir terminé l'onboarding.
+   *
+   * Les pages publiques restent accessibles.
    */
   if (
-    userId &&
-    (pathname === "/connexion" ||
-      pathname === "/inscription")
+    !onboardingCompleted &&
+    !isPublicRoute &&
+    pathname !== "/onboarding"
   ) {
-    const dashboardUrl =
-      request.nextUrl.clone();
+    const onboardingUrl = request.nextUrl.clone();
 
-    dashboardUrl.pathname =
-      "/dashboard";
+    onboardingUrl.pathname = "/onboarding";
+    onboardingUrl.search = "";
 
+    return NextResponse.redirect(onboardingUrl);
+  }
+
+  /*
+   * Une fois l'onboarding terminé, revenir manuellement
+   * sur /onboarding renvoie vers le dashboard.
+   */
+  if (onboardingCompleted && pathname === "/onboarding") {
+    const dashboardUrl = request.nextUrl.clone();
+
+    dashboardUrl.pathname = "/dashboard";
     dashboardUrl.search = "";
 
-    return NextResponse.redirect(
-      dashboardUrl
-    );
+    return NextResponse.redirect(dashboardUrl);
   }
 
   return response;
